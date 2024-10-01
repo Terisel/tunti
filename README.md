@@ -1,2 +1,2 @@
 # tunti
-Sähkönseuranta app mobiilikäyttöön
+Sähkönseuranta app mobiilikäyttöön.
