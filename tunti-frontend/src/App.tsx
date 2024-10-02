@@ -12,7 +12,9 @@ function App() {
           count is {count}
         </button>
       </div>
-      <div className='font-bold'>tailwind testi</div>
+      <div className='bg-priceLow'>Price Low</div>
+      <div className='bg-priceMedium'>Price medium</div>
+      <div className='bg-priceHigh'>Price High</div>
     </>
   )
 }
