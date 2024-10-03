@@ -5,6 +5,7 @@ import path from "path"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/tunti/', // Replace [REPO_NAME] with your actual repo name
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
