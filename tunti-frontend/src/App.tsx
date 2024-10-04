@@ -15,8 +15,13 @@ interface PriceData {
     prices: PriceEntry[];
 }
 
-// API URL
+// API URL for fetching latest price data
+// In development, this URL is proxied through Vite's server to avoid CORS issues.
+// The '/api' prefix will be rewritten to point to the actual API endpoint.
+// Uncomment the line below for production deployment, where requests will go through a CORS proxy.
+// This is necessary if the target API does not support CORS for your domain.
 const API_URL = '/api/v1/latest-prices.json';
+// const API_URL = 'https://cors-anywhere.herokuapp.com/https://api.porssisahko.net/v1/latest-prices.json';
 
 // Function to fetch price data from the API
 const fetchPriceData = async (): Promise<PriceData> => {
@@ -53,8 +58,11 @@ function App() {
     // Function to format the start date
     const formatStartDate = (dateString: string): string => {
         const date = new Date(dateString);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formats to HH:mm
+        return date.toLocaleTimeString([], { weekday: 'long', hour: '2-digit', minute: '2-digit' }); // Formats to HH:mm
     };
+
+    // Sort price data by endDate in descending order (latest first)
+    const sortedPriceData = [...priceData].sort((a, b) =>  new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
 
     // Render loading state or error message
     if (loading) return <div>Loading...</div>;
@@ -65,7 +73,7 @@ function App() {
             <h1>Tunti - Pörssisähkön seuranta</h1>
             <ScrollArea className="rounded-md border">
                 <div className="p-4">
-                    {priceData.map((entry, index) => (
+                    {sortedPriceData.map((entry, index) => (
                         <div key={index}>
                             {formatStartDate(entry.startDate)} - Price: {entry.price}
                             <Separator className="my-2" />
