@@ -18,6 +18,7 @@ interface PriceData {
 // API URL
 const API_URL = '/api/v1/latest-prices.json';
 
+
 // Function to fetch price data from the API
 const fetchPriceData = async (): Promise<PriceData> => {
     const response = await fetch(API_URL);
@@ -53,8 +54,11 @@ function App() {
     // Function to format the start date
     const formatStartDate = (dateString: string): string => {
         const date = new Date(dateString);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formats to HH:mm
+        return date.toLocaleTimeString([], { weekday: 'long', hour: '2-digit', minute: '2-digit' }); // Formats to HH:mm
     };
+
+    // Sort price data by endDate in descending order (latest first)
+    const sortedPriceData = [...priceData].sort((a, b) =>  new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
 
     // Render loading state or error message
     if (loading) return <div>Loading...</div>;
@@ -65,7 +69,7 @@ function App() {
             <h1>Tunti - Pörssisähkön seuranta</h1>
             <ScrollArea className="rounded-md border">
                 <div className="p-4">
-                    {priceData.map((entry, index) => (
+                    {sortedPriceData.map((entry, index) => (
                         <div key={index}>
                             {formatStartDate(entry.startDate)} - Price: {entry.price}
                             <Separator className="my-2" />
