@@ -1,7 +1,7 @@
 import { createContext, useEffect, useContext } from "react"
 import React, { useState, ReactNode } from "react"
-import { fetchPriceData } from  "@/api.ts"
-import { PriceEntry } from  "@/types/types.ts"
+import { fetchPriceData } from "@/api.ts"
+import { PriceEntry } from "@/types/types.ts"
 
 // Define the shape of your context
 interface PriceContextType {
@@ -39,14 +39,14 @@ const PriceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
 // Custom hook to access PriceContext
 const usePriceContext = () => {
-    const context = useContext(PriceContext); // Get context value
+  const context = useContext(PriceContext) // Get context value
 
-    // Ensure the hook is used within a PriceProvider
-    if (!context) {
-        throw new Error("usePriceContext must be used within a PriceProvider");
-    }
+  // Ensure the hook is used within a PriceProvider
+  if (!context) {
+    throw new Error("usePriceContext must be used within a PriceProvider")
+  }
 
-    return context; // Return the context value
-};
+  return context // Return the context value
+}
 
 export { PriceProvider, usePriceContext }
