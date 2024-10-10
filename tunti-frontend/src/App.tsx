@@ -1,4 +1,3 @@
-import "./App.css"
 import { PriceList } from "@/components/domain/price-list"
 import { usePriceContext } from "@/contexts/price-context.tsx"
 
