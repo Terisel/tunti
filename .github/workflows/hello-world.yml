@@ -1,4 +1,4 @@
-name: Hello World Workflow
+name: API Call Workflow
 
 on:
   workflow_dispatch:  # Allows manual triggering
@@ -7,7 +7,7 @@ on:
       - hello-world-action  # Trigger on pushes to this branch
 
 jobs:
-  hello:
+  api-call:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,7 +18,14 @@ jobs:
         with:
           python-version: '3.x'  # Use the latest version of Python
 
-      - name: Run Hello World Script
+      - name: Install requests library
         run: |
-          echo "print('Hello, World!')" > hello.py  # Create a simple Python script
-          python hello.py  # Run the script
+          python -m pip install requests
+
+      - name: Make API Call and Print Response
+        run: |
+          python -c "
+import requests
+response = requests.get('https://api.porssisahko.net/v1/latest-prices.json')
+print(response.json())  # Print the JSON response
+"
