@@ -22,10 +22,9 @@ jobs:
         run: |
           python -m pip install requests
 
-      - name: Make API Call and Print Response
+      - name: Create and Run API Call Script
         run: |
-          python -c "
-import requests
-response = requests.get('https://api.porssisahko.net/v1/latest-prices.json')
-print(response.json())  # Print the JSON response
-"
+          echo "import requests" > api_call.py
+          echo "response = requests.get('https://api.porssisahko.net/v1/latest-prices.json')" >> api_call.py
+          echo "print(response.json())" >> api_call.py
+          python api_call.py  # Run the script
