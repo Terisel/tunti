@@ -23,7 +23,8 @@ jobs:
         run: mkdir -p data
 
       - name: Create Test JSON File
-        run: echo '{"message": "This is a test file."}' > data/testfile.json
+        run: |
+          echo '{"message": "This is a test file."}' > data/testfile.json
 
       - name: Commit and Push Changes
         run: |
