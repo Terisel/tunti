@@ -1,0 +1,28 @@
+name: API Download and Print Response
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  download-and-print:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install requests
+        run: |
+          python -m pip install requests
+
+      - name: Download data from API and print response
+        run: |
+          import requests
+          response = requests.get('https://api.porssisahko.net/v1/latest-prices.json')
+          print(response.text)  # Print the response to the console
