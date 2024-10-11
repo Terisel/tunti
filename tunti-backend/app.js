@@ -1,6 +1,16 @@
-const express = require("express");
+const express = require('express');
+const cors = require('cors'); // Import the cors package
 const app = express();
 const PORT = 4000;
+
+// Configure CORS
+const allowedOrigins = ['https://terisel.github.io/tunti/']; // Replace with your frontend domain
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods
+    credentials: true // Allow credentials if needed (e.g., cookies)
+}));
 
 // Sample data for demonstration
 const latestPrices = {
