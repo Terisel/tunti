@@ -4,7 +4,7 @@ const app = express();
 const PORT = 4000;
 
 // Configure CORS
-const allowedOrigins = ['https://terisel.github.io/tunti/']; // Replace with your frontend domain
+const allowedOrigins = ['https://terisel.github.io']; // Replace with your frontend domain
 
 app.use(cors({
     origin: allowedOrigins,
