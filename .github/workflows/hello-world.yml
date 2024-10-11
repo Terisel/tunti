@@ -1,30 +1,36 @@
 name: API Call Workflow
 
 on:
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:
   push:
     branches:
-      - hello-world-action  # Trigger on pushes to this branch
+      - hello-world-action
+
+permissions:
+  contents: write  # Default permission for all jobs
 
 jobs:
   api-call:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write  # Specific permission for this job only
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'  # Use the latest version of Python
+      - name: Create Data Directory
+        run: mkdir -p data
 
-      - name: Install requests library
-        run: |
-          python -m pip install requests
+      - name: Create Test JSON File
+        run: echo '{"message": "This is a test file."}' > data/testfile.json
 
-      - name: Create and Run API Call Script
+      - name: Commit and Push Changes
         run: |
-          echo "import requests" > api_call.py
-          echo "response = requests.get('https://api.porssisahko.net/v1/latest-prices.json')" >> api_call.py
-          echo "print(response.json())" >> api_call.py
-          python api_call.py  # Run the script
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/testfile.json
+          git commit -m "Add test JSON file"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}  # Use GitHub token for authentication
