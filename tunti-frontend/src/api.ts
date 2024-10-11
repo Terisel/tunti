@@ -1,4 +1,4 @@
-import { PriceData } from  "@/types/types.ts"
+import { PriceData } from "@/types/types.ts"
 
 // API URL for fetching latest price data
 // In development, this URL is proxied through Vite's server to avoid CORS issues.
@@ -15,5 +15,16 @@ export const fetchPriceData = async (): Promise<PriceData> => {
     throw new Error("Network response was not ok")
   }
   const data: PriceData = await response.json()
+  return data
+}
+
+const NEW_API_URL = "/new-api/v1/hinnat" // Adjust the endpoint as needed
+
+export const fetchNewData = async () => {
+  const response = await fetch(NEW_API_URL)
+  if (!response.ok) {
+    throw new Error("Network response was not ok")
+  }
+  const data = await response.json()
   return data
 }
