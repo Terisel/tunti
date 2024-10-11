@@ -1,6 +1,6 @@
 import { createContext, useEffect, useContext } from "react"
 import React, { useState, ReactNode } from "react"
-import { fetchPriceData } from "@/api.ts"
+import { fetchPriceData, fetchNewData } from "@/api.ts"
 import { PriceEntry } from "@/types/types.ts"
 
 // Define the shape of your context
@@ -31,6 +31,15 @@ const PriceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       }
     }
 
+    const getNewData = async () => {
+      try {
+        const newData = await fetchNewData()
+        console.log(newData) // Set price entries directly
+      } catch (err) {
+        console.log(err instanceof Error ? err.message : "An unknown error occurred")
+      }
+    }
+    getNewData()
     getPriceData()
   }, []) // Empty dependency array ensures this runs once on mount
 
