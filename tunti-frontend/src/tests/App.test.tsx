@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
 import App from "@/App.tsx"
@@ -5,9 +6,9 @@ import { PriceProvider, usePriceContext } from "@/contexts/price-context.tsx"
 
 // Mocking the usePriceContext hook
 jest.mock("@/contexts/price-context.tsx", () => ({
-  PriceProvider: ({ children }) => <div>{children}</div>,
-  usePriceContext: jest.fn()
-}))
+  PriceProvider: ({ children }: { children: ReactNode }) => <div>{children}</div>,
+  usePriceContext: jest.fn(),
+}));
 
 describe("App", () => {
   beforeEach(() => {

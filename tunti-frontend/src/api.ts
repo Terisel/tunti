@@ -18,7 +18,7 @@ export const fetchPriceData = async (): Promise<PriceData> => {
   return data
 }
 
-const NEW_API_URL = "/new-api/v1/hinnat" // Adjust the endpoint as needed
+const NEW_API_URL = "https://tunti-backend.fly.dev/new-api/v1/hinnat" // Adjust the endpoint as needed
 
 export const fetchNewData = async () => {
   const response = await fetch(NEW_API_URL)
