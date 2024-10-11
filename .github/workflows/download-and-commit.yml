@@ -23,6 +23,6 @@ jobs:
 
       - name: Download data from API and print response
         run: |
-          import requests
+          python -m pip install requests
           response = requests.get('https://api.porssisahko.net/v1/latest-prices.json')
           print(response.text)  # Print the response to the console
