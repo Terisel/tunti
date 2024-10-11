@@ -1,7 +1,10 @@
 name: Hello World Workflow
 
 on:
-  workflow_dispatch:  # This allows manual triggering
+  workflow_dispatch:  # Allows manual triggering
+  push:
+    branches:
+      - hello-world-action  # Trigger on pushes to this branch
 
 jobs:
   hello:
