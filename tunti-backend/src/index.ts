@@ -5,16 +5,15 @@ import https from 'https';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
 
-// Sample data for demonstration
-const latestPrices = {
-  prices: [
-    { item: "Item 1", price: 100 },
-    { item: "Item 2", price: 200 },
-  ],
+const corsOptions = {
+  origin: 'https://terisel.github.io', 
+  methods: 'GET', 
+  optionsSuccessStatus: 200 
 };
+
+app.use(cors(corsOptions)); // Use CORS with the specified options
 
 app.get("/api/latest-prices", (req, res) => {
   const url = "https://api.porssisahko.net/v1/latest-prices.json";
