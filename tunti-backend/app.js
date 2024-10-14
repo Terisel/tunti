@@ -6,11 +6,7 @@ const PORT = 4000;
 // Configure CORS
 const allowedOrigins = ['https://terisel.github.io']; // Replace with your frontend domain
 
-app.use(cors({
-    origin: allowedOrigins,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Specify allowed methods
-    credentials: true // Allow credentials if needed (e.g., cookies)
-}));
+app.use(cors());
 
 // Sample data for demonstration
 const latestPrices = {
