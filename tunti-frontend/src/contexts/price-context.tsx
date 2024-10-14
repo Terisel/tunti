@@ -1,6 +1,6 @@
 import { createContext, useEffect, useContext } from "react"
 import React, { useState, ReactNode } from "react"
-import { fetchPriceData, fetchNewData } from "@/api.ts"
+import { fetchPriceData } from "@/api.ts"
 import { PriceEntry } from "@/types/types.ts"
 
 // Define the shape of your context
