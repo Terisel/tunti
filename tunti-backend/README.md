@@ -10,11 +10,16 @@
 2. **Install Dependencies**:
    - Navigate to your project directory and run the following command:
    ```bash
-   npm install express
+   npm install
 3. **Start the Application**:
-   - Run the application with this command:
+   - Run the following command to start your application in development mode:
    ```bash
-   node app.js
+   npm run dev
+4. **Build and Run for Production**:
+   - To build your application and run it in production mode, use:
+   ```bash
+   npm run build
+   npm start
 ## Running the Backend in Docker
 
 To run the `tunti-backend` Node.js application in Docker, follow these steps:
