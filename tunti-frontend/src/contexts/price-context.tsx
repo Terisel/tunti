@@ -31,15 +31,6 @@ const PriceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       }
     }
 
-    const getNewData = async () => {
-      try {
-        const newData = await fetchNewData()
-        console.log(newData) // Set price entries directly
-      } catch (err) {
-        console.log(err instanceof Error ? err.message : "An unknown error occurred")
-      }
-    }
-    getNewData()
     getPriceData()
   }, []) // Empty dependency array ensures this runs once on mount
 
