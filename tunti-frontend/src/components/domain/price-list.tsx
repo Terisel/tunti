@@ -21,12 +21,12 @@ function PriceList() {
   // Function to format the start date
   const formatStartDate = (dateString: string): string => {
     const date = new Date(dateString)
-    return date.toLocaleTimeString([], { weekday: "long", hour: "2-digit", minute: "2-digit" }) // Formats to day HH:mm
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) // Formats to day HH:mm
   }
 
   const formatPrice = (price: number): string => {
-    return (Math.round(price * 100) / 100).toFixed(2); // Round and format to two decimals
-  };
+    return (Math.round(price * 100) / 100).toFixed(2) // Round and format to two decimals
+  }
 
   useEffect(() => {
     // Scroll to the current hour element if it exists
@@ -48,16 +48,23 @@ function PriceList() {
           }
 
           const isCurrentHour = entry.startDate === currentHour
+          const currentDate = new Date(entry.startDate).toLocaleDateString()
+          const previousDate = index > 0 ? new Date(sortedPriceData[index - 1].startDate).toLocaleDateString() : null
 
           return (
             <div key={index}>
+              {currentDate !== previousDate && (
+                <h2 className="text-l font-bold my-4">
+                  {new Date(entry.startDate).toLocaleDateString("en-US", { weekday: "long" })} {/* Display day */}
+                </h2>
+              )}
               <div
                 ref={isCurrentHour ? currentHourRef : null}
                 className={`flex items-center justify-between my-2 p-3 rounded-lg transition-all duration-300 ${isCurrentHour ? "bg-blue-600 text-white border border-blue-400 shadow-lg" : ""}`}
               >
                 <div className={`w-3 h-3 ${indicatorColor} mr-2`} />
                 <span className="flex-grow text-left">{formatStartDate(entry.startDate)}</span>
-                <span className="text-right">{formatPrice(entry.price)}  c/kWh</span>
+                <span className="text-right">{formatPrice(entry.price)} c/kWh</span>
               </div>
               <Separator className="my-2" />
             </div>
