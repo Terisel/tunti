@@ -22,7 +22,6 @@ const PriceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     const getPriceData = async () => {
       try {
-        console.log("hakee")
         const data = await fetchPriceData()
         setPriceData(data.prices) // Set price entries directly
       } catch (err) {
