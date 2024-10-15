@@ -23,6 +23,11 @@ function PriceList() {
     const date = new Date(dateString)
     return date.toLocaleTimeString([], { weekday: "long", hour: "2-digit", minute: "2-digit" }) // Formats to day HH:mm
   }
+
+  const formatPrice = (price: number): string => {
+    return (Math.round(price * 100) / 100).toFixed(2); // Round and format to two decimals
+  };
+
   useEffect(() => {
     // Scroll to the current hour element if it exists
     if (currentHourRef.current) {
@@ -52,7 +57,7 @@ function PriceList() {
               >
                 <div className={`w-3 h-3 ${indicatorColor} mr-2`} />
                 <span className="flex-grow text-left">{formatStartDate(entry.startDate)}</span>
-                <span className="text-right">{entry.price} c/kWh</span>
+                <span className="text-right">{formatPrice(entry.price)}  c/kWh</span>
               </div>
               <Separator className="my-2" />
             </div>
