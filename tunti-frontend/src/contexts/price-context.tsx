@@ -1,4 +1,4 @@
-import { createContext, useEffect, useContext } from "react"
+import { createContext, useEffect, useContext, useMemo } from "react"
 import React, { useState, ReactNode } from "react"
 import { fetchPriceData } from "@/api.ts"
 import { PriceEntry } from "@/types/types.ts"
@@ -34,13 +34,14 @@ const PriceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     getPriceData()
   }, []) // Empty dependency array ensures this runs once on mount
 
-  return <PriceContext.Provider value={{ priceData, loading, error }}>{children}</PriceContext.Provider>
+  const value = useMemo(() => ({ priceData, loading, error }), [priceData, loading, error])
+
+  return <PriceContext.Provider value={value}>{children}</PriceContext.Provider>
 }
 
 // Custom hook to access PriceContext
 const usePriceContext = () => {
   const context = useContext(PriceContext) // Get context value
-
   // Ensure the hook is used within a PriceProvider
   if (!context) {
     throw new Error("usePriceContext must be used within a PriceProvider")
