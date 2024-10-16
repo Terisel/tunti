@@ -7,12 +7,12 @@ function App() {
   const { loading, error } = context
 
   // Render loading state or error message
-  if (loading) return <div>Loading...</div>
-  if (error) return <div>Error: {error}</div>
+  if (loading) return  <h1 className="text-2xl font-bold text-center">Loading...</h1>
+  if (error) return <h1 className="text-2xl font-bold text-center">Error: {error}</h1>
 
   return (
     <>
-      <h1>Tunti - Pörssisähkön seuranta</h1>
+      <h1 className="text-2xl font-bold text-center">Tunti - Pörssisähkön seuranta</h1>
       <PriceList />
     </>
   )
