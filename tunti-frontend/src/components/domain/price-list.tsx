@@ -2,6 +2,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { usePriceContext } from "@/contexts/price-context.tsx"
+import { Moon } from "lucide-react"
 
 const getCurrentHour = (): string => {
   const now = new Date()
@@ -31,6 +32,9 @@ function PriceList() {
   return (
     <ScrollArea className="rounded-[16px] border">
       {priceData.map((entry, index) => {
+        // Get hour from entry's startDate
+        const entryHour = new Date(entry.startDate).getHours()
+        let showMoonIcon = false // Flag for showing moon icon
         let elementBackgroundColor = "bg-priceLowTransparent" // Default background color
         let textColor = "text-priceLow" // Default text color
 
@@ -42,6 +46,11 @@ function PriceList() {
           textColor = "text-priceHigh" // Change text color for red range
         }
 
+        // Check if hour is between 22 and 06 for moon icon
+        if (entryHour >= 22 || entryHour < 6) {
+          showMoonIcon = true // Set flag to show moon icon
+        }
+
         // Apply styles for the first element based on whether it's the current hour
         const isCurrentHourFirstElement = index === 0 && entry.startDate === currentHour
 
@@ -50,7 +59,10 @@ function PriceList() {
             <div
               className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHourFirstElement ? ` ${elementBackgroundColor} ` : ""}`}
             >
-              <span className="flex-grow text-left">{formatStartDate(entry.startDate)}</span>
+              <span className="flex items-center flex-grow text-left">
+                {formatStartDate(entry.startDate)}
+                {showMoonIcon && <Moon className="inline-block ml-1 w-4 h-4" />}
+              </span>
               <span className={`text-right ${textColor}`}>{formatPrice(entry.price)} c/kWh</span>
             </div>
             <Separator className="" />
