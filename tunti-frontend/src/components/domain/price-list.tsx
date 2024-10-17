@@ -1,11 +1,83 @@
 // tunti-frontend/src/components/domain/price-list.tsx
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
 import { usePriceContext } from "@/contexts/price-context.tsx"
+import { Moon } from "lucide-react"
+import { PriceEntry } from "@/types/types"
+import { formatStartDate, formatPrice, getDayNameInFinnish } from "@/utils/priceUtils" // Import the utility functions
+
+// New interface for PriceListScrollArea props
+export interface PriceListScrollAreaProps {
+  priceData: PriceEntry[] // Array of price entries
+  currentHour: string // Current hour in ISO format
+}
+
+// Function to check if the given date is the first hour of the day (00:00)
+const isFirstHourOfDay = (dateString: string): boolean => {
+  const date = new Date(dateString)
+  return date.getHours() === 0 && date.getMinutes() === 0 // Check for 00:00
+}
 
 const getCurrentHour = (): string => {
   const now = new Date()
   return now.toISOString().substring(0, 13) + ":00:00.000Z" // Format as "YYYY-MM-DDTHH:00:00.000Z"
+}
+
+// Helper function to get colors based on price
+const getColorsByPrice = (price: number) => {
+  if (price > 8 && price < 15) {
+    return { backgroundColor: "bg-yellow-300", textColor: "text-yellow-800" }
+  } else if (price > 15) {
+    return { backgroundColor: "bg-priceHighTransparent", textColor: "text-priceHigh" }
+  }
+  return { backgroundColor: "bg-priceLowTransparent", textColor: "text-priceLow" }
+}
+
+// Helper function to determine if moon icon should be shown
+const shouldShowMoonIcon = (hour: number) => hour >= 22 || hour < 6
+
+const PriceListScrollArea: React.FC<PriceListScrollAreaProps> = ({ priceData, currentHour }) => {
+  return (
+    <ScrollArea className="rounded-[16px] border">
+      {priceData.map((entry, index) => {
+        const entryHour = new Date(entry.startDate).getHours()
+        const { backgroundColor, textColor } = getColorsByPrice(entry.price)
+        const showMoonIcon = shouldShowMoonIcon(entryHour)
+
+        // Determine if this is the first element and if it matches the current hour
+        const isCurrentHourFirstElement = index === 0 && entry.startDate === currentHour
+
+        // Determine final background color based on conditions
+        const finalBackgroundColor = isCurrentHourFirstElement
+          ? backgroundColor // Use price-based color for the first element
+          : showMoonIcon
+            ? "bg-nightTime" // Use purple background if not first and moon icon should be shown
+            : "" // No specific background if neither condition is met
+        const isMidnight = isFirstHourOfDay(entry.startDate)
+        return (
+          <div key={index}>
+            {isMidnight ? (
+              <div
+                className={`flex border-b border-b-lightGray items-center p-[8px_16px] h-[36px] justify-between ${finalBackgroundColor}`}
+              >
+                <span>{getDayNameInFinnish(entry.startDate)}</span>
+              </div>
+            ) : (
+              <></>
+            )}
+            <div
+              className={`flex border-b border-b-lightGray items-center p-[8px_16px] h-[36px] justify-between ${finalBackgroundColor}`}
+            >
+              <span className="flex-grow text-left">
+                {formatStartDate(entry.startDate)}
+                {showMoonIcon && <Moon className="inline-block ml-1 w-4 h-4" />}
+              </span>
+              <span className={`font-right ${textColor}`}>{formatPrice(entry.price)} c/kWh</span>
+            </div>
+          </div>
+        )
+      })}
+    </ScrollArea>
+  )
 }
 
 function PriceList() {
@@ -18,51 +90,10 @@ function PriceList() {
     return <h1 className="text-2xl font-bold text-center">No future price data available.</h1>
   }
 
-  // Function to format the start date
-  const formatStartDate = (dateString: string): string => {
-    const date = new Date(dateString)
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) // Formats to day HH:mm
-  }
-
-  const formatPrice = (price: number): string => {
-    return (Math.round(price * 100) / 100).toFixed(2) // Round and format to two decimals
-  }
-
   return (
-    <ScrollArea className="rounded-md border">
-      <div className="p-4">
-        {priceData.map((entry, index) => {
-          let indicatorColor = "bg-green-500"
-          if (entry.price > 8 && entry.price < 15) {
-            indicatorColor = "bg-yellow-500"
-          } else if (entry.price > 15) {
-            indicatorColor = "bg-red-500"
-          }
-
-          const isCurrentHour = entry.startDate === currentHour
-          const currentDate = new Date(entry.startDate).toLocaleDateString()
-          const previousDate = index > 0 ? new Date(priceData[index - 1].startDate).toLocaleDateString() : null
-
-          return (
-            <div key={index}>
-              {currentDate !== previousDate && (
-                <h2 className="text-l font-bold my-4">
-                  {new Date(entry.startDate).toLocaleDateString("en-US", { weekday: "long" })}
-                </h2>
-              )}
-              <div
-                className={`flex items-center justify-between my-2 p-3 rounded-lg transition-all duration-300 ${isCurrentHour ? "bg-blue-600 text-white border border-blue-400 shadow-lg" : ""}`}
-              >
-                <div className={`w-3 h-3 ${indicatorColor} mr-2`} />
-                <span className="flex-grow text-left">{formatStartDate(entry.startDate)}</span>
-                <span className="text-right">{formatPrice(entry.price)} c/kWh</span>
-              </div>
-              <Separator className="my-2" />
-            </div>
-          )
-        })}
-      </div>
-    </ScrollArea>
+    <div>
+      <PriceListScrollArea priceData={priceData} currentHour={currentHour} />
+    </div>
   )
 }
 
