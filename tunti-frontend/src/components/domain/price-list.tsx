@@ -44,13 +44,12 @@ function PriceList() {
         return (
           <div key={index}>
             <div
-              className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHourFirstElement ? "bg-blue-600 text-white border border-blue-400 shadow-lg" : ""}`}
+              className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHourFirstElement ? ` ${indicatorColor} ` : ""}`}
             >
-              <div className={`w-3 h-3 ${indicatorColor} mr-2`} />
               <span className="flex-grow text-left">{formatStartDate(entry.startDate)}</span>
               <span className="text-right">{formatPrice(entry.price)} c/kWh</span>
             </div>
-            <Separator className="my-2" />
+            <Separator className="" />
           </div>
         )
       })}
