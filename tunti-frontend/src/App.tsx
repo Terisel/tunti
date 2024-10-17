@@ -1,3 +1,4 @@
+// tunti-frontend/src/App.tsx
 import { PriceList } from "@/components/domain/price-list"
 import { usePriceContext } from "@/contexts/price-context.tsx"
 

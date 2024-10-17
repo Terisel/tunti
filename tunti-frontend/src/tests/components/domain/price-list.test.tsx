@@ -1,3 +1,4 @@
+// tunti-frontend/src/tests/components/domain/price-list.test.tsx
 import { ReactNode } from "react"
 import { render, screen } from "@testing-library/react"
 import "@testing-library/jest-dom"
