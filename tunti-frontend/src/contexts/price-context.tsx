@@ -1,3 +1,4 @@
+// tunti-frontend/src/contexts/price-context.tsx
 import { createContext, useEffect, useContext, useMemo } from "react"
 import React, { useState, ReactNode } from "react"
 import { fetchPriceData } from "@/api.ts"
@@ -23,7 +24,9 @@ const PriceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const getPriceData = async () => {
       try {
         const data = await fetchPriceData()
-        setPriceData(data.prices) // Set price entries directly
+        // Sort price data here before setting it
+        const sortedData = data.prices.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
+        setPriceData(sortedData) // Set sorted price entries directly
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
@@ -42,11 +45,9 @@ const PriceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 // Custom hook to access PriceContext
 const usePriceContext = () => {
   const context = useContext(PriceContext) // Get context value
-  // Ensure the hook is used within a PriceProvider
   if (!context) {
     throw new Error("usePriceContext must be used within a PriceProvider")
   }
-
   return context // Return the context value
 }
 

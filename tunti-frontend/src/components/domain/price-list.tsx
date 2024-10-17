@@ -1,3 +1,4 @@
+// tunti-frontend/src/components/domain/price-list.tsx
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { usePriceContext } from "@/contexts/price-context.tsx"
@@ -12,11 +13,11 @@ function PriceList() {
   const context = usePriceContext()
   const { priceData } = context
   const currentHour = getCurrentHour()
+
   // Create a ref to store the current hour element
   const currentHourRef = useRef<HTMLDivElement | null>(null)
 
-  // Sort price data by endDate in descending order (latest first)
-  const sortedPriceData = [...priceData].sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime())
+  // Use priceData directly as it's already sorted in the provider
 
   // Function to format the start date
   const formatStartDate = (dateString: string): string => {
@@ -38,8 +39,7 @@ function PriceList() {
   return (
     <ScrollArea className="rounded-md border">
       <div className="p-4">
-        {sortedPriceData.map((entry, index) => {
-          // Determine the color of the indicator based on price
+        {priceData.map((entry, index) => {
           let indicatorColor = "bg-green-500"
           if (entry.price > 8 && entry.price < 15) {
             indicatorColor = "bg-yellow-500"
@@ -49,13 +49,13 @@ function PriceList() {
 
           const isCurrentHour = entry.startDate === currentHour
           const currentDate = new Date(entry.startDate).toLocaleDateString()
-          const previousDate = index > 0 ? new Date(sortedPriceData[index - 1].startDate).toLocaleDateString() : null
+          const previousDate = index > 0 ? new Date(priceData[index - 1].startDate).toLocaleDateString() : null
 
           return (
             <div key={index}>
               {currentDate !== previousDate && (
                 <h2 className="text-l font-bold my-4">
-                  {new Date(entry.startDate).toLocaleDateString("en-US", { weekday: "long" })} {/* Display day */}
+                  {new Date(entry.startDate).toLocaleDateString("en-US", { weekday: "long" })}
                 </h2>
               )}
               <div
