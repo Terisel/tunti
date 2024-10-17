@@ -8,9 +8,12 @@ export default {
         primary: "#4e8098",
         secondary: "#ced3dc",
         white: "#fcf7f8",
-        priceHigh: "#a31621",
+        priceHigh: "#FB181C",
+        priceHighTransparent: 'rgba(251, 24, 28, 0.15)',
         priceMedium: "#fabc3c",
-        priceLow: "#71ba4f"
+        priceLow: "#008C0C",
+        priceLowTransparent: 'rgba(0, 140, 12, 0.15)'
+
       },
       borderRadius: {
         lg: "var(--radius)",
