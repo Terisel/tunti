@@ -1,3 +1,4 @@
+// tunti-frontend/src/types/types.ts
 export interface PriceEntry {
   price: number
   startDate: string

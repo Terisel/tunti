@@ -3,32 +3,30 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { usePriceContext } from "@/contexts/price-context.tsx"
 import { Moon } from "lucide-react"
+import { PriceEntry } from "@/types/types"
 
+// New interface for PriceListScrollArea props
+export interface PriceListScrollAreaProps {
+  priceData: PriceEntry[] // Array of price entries
+  currentHour: string // Current hour in ISO format
+}
 const getCurrentHour = (): string => {
   const now = new Date()
   return now.toISOString().substring(0, 13) + ":00:00.000Z" // Format as "YYYY-MM-DDTHH:00:00.000Z"
 }
 
-function PriceList() {
-  const context = usePriceContext()
-  const { priceData } = context
-  const currentHour = getCurrentHour()
+// Function to format the start date
+const formatStartDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) // Formats to HH:mm
+}
 
-  // Check if there are future prices
-  if (priceData.length === 0) {
-    return <h1 className="text-2xl font-bold text-center">No future price data available.</h1>
-  }
+// Function to format price
+const formatPrice = (price: number): string => {
+  return (Math.round(price * 100) / 100).toFixed(2) // Round and format to two decimals
+}
 
-  // Function to format the start date
-  const formatStartDate = (dateString: string): string => {
-    const date = new Date(dateString)
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) // Formats to HH:mm
-  }
-
-  const formatPrice = (price: number): string => {
-    return (Math.round(price * 100) / 100).toFixed(2) // Round and format to two decimals
-  }
-
+const PriceListScrollArea: React.FC<PriceListScrollAreaProps> = ({ priceData, currentHour }) => {
   return (
     <ScrollArea className="rounded-[16px] border">
       {priceData.map((entry, index) => {
@@ -59,7 +57,7 @@ function PriceList() {
             <div
               className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHourFirstElement ? ` ${elementBackgroundColor} ` : ""}`}
             >
-              <span className="flex items-center flex-grow text-left">
+              <span className="flex-grow text-left">
                 {formatStartDate(entry.startDate)}
                 {showMoonIcon && <Moon className="inline-block ml-1 w-4 h-4" />}
               </span>
@@ -70,6 +68,23 @@ function PriceList() {
         )
       })}
     </ScrollArea>
+  )
+}
+
+function PriceList() {
+  const context = usePriceContext()
+  const { priceData } = context
+  const currentHour = getCurrentHour()
+
+  // Check if there are future prices
+  if (priceData.length === 0) {
+    return <h1 className="text-2xl font-bold text-center">No future price data available.</h1>
+  }
+
+  return (
+    <div>
+      <PriceListScrollArea priceData={priceData} currentHour={currentHour} />
+    </div>
   )
 }
 
