@@ -1,6 +1,5 @@
 // tunti-frontend/src/components/domain/price-list.tsx
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
 import { usePriceContext } from "@/contexts/price-context.tsx"
 import { Moon } from "lucide-react"
 import { PriceEntry } from "@/types/types"
@@ -38,13 +37,20 @@ const PriceListScrollArea: React.FC<PriceListScrollAreaProps> = ({ priceData, cu
         const { backgroundColor, textColor } = getColorsByPrice(entry.price)
         const showMoonIcon = shouldShowMoonIcon(entryHour)
 
-        // Apply styles for the first element based on whether it's the current hour
+        // Determine if this is the first element and if it matches the current hour
         const isCurrentHourFirstElement = index === 0 && entry.startDate === currentHour
+
+        // Determine final background color based on conditions
+        const finalBackgroundColor = isCurrentHourFirstElement
+          ? backgroundColor // Use price-based color for the first element
+          : showMoonIcon
+            ? "bg-nightTime" // Use purple background if not first and moon icon should be shown
+            : "" // No specific background if neither condition is met
 
         return (
           <div key={index}>
             <div
-              className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHourFirstElement ? ` ${backgroundColor} ` : ""}`}
+              className={`flex border-b border-b-[#ECECEC] items-center p-[8px_16px] h-[36px] justify-between ${finalBackgroundColor}`}
             >
               <span className="flex-grow text-left">
                 {formatStartDate(entry.startDate)}
@@ -52,7 +58,6 @@ const PriceListScrollArea: React.FC<PriceListScrollAreaProps> = ({ priceData, cu
               </span>
               <span className={`text-right ${textColor}`}>{formatPrice(entry.price)} c/kWh</span>
             </div>
-            <Separator className="" />
           </div>
         )
       })}

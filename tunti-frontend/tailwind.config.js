@@ -12,7 +12,8 @@ export default {
         priceHighTransparent: 'rgba(251, 24, 28, 0.15)',
         priceMedium: "#fabc3c",
         priceLow: "#008C0C",
-        priceLowTransparent: 'rgba(0, 140, 12, 0.15)'
+        priceLowTransparent: 'rgba(0, 140, 12, 0.15)',
+        nightTime: "#EBE2FF"
 
       },
       borderRadius: {
