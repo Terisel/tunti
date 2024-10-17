@@ -17,7 +17,10 @@ function PriceList() {
   // Create a ref to store the current hour element
   const currentHourRef = useRef<HTMLDivElement | null>(null)
 
-  // Use priceData directly as it's already sorted in the provider
+  // Check if there are future prices
+  if (priceData.length === 0) {
+    return <h1 className="text-2xl font-bold text-center">No future price data available.</h1>
+  }
 
   // Function to format the start date
   const formatStartDate = (dateString: string): string => {
