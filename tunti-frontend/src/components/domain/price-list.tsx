@@ -31,11 +31,15 @@ function PriceList() {
   return (
     <ScrollArea className="rounded-[16px] border">
       {priceData.map((entry, index) => {
-        let indicatorColor = "bg-green-500"
+        let indicatorColor = "bg-green-300" // Default background color
+        let textColor = "text-green-800" // Default text color
+
         if (entry.price > 8 && entry.price < 15) {
-          indicatorColor = "bg-yellow-500"
+          indicatorColor = "bg-yellow-300"
+          textColor = "text-yellow-800" // Change text color for yellow range
         } else if (entry.price > 15) {
-          indicatorColor = "bg-red-500"
+          indicatorColor = "bg-red-300"
+          textColor = "text-red-800" // Change text color for red range
         }
 
         // Apply styles for the first element based on whether it's the current hour
@@ -47,7 +51,7 @@ function PriceList() {
               className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHourFirstElement ? ` ${indicatorColor} ` : ""}`}
             >
               <span className="flex-grow text-left">{formatStartDate(entry.startDate)}</span>
-              <span className="text-right">{formatPrice(entry.price)} c/kWh</span>
+              <span className={`text-right ${textColor}`}>{formatPrice(entry.price)} c/kWh</span>
             </div>
             <Separator className="" />
           </div>
