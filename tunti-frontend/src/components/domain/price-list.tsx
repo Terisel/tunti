@@ -50,7 +50,7 @@ const PriceListScrollArea: React.FC<PriceListScrollAreaProps> = ({ priceData, cu
         return (
           <div key={index}>
             <div
-              className={`flex border-b border-b-[#ECECEC] items-center p-[8px_16px] h-[36px] justify-between ${finalBackgroundColor}`}
+              className={`flex border-b border-b-lightGray items-center p-[8px_16px] h-[36px] justify-between ${finalBackgroundColor}`}
             >
               <span className="flex-grow text-left">
                 {formatStartDate(entry.startDate)}

@@ -13,7 +13,8 @@ export default {
         priceMedium: "#fabc3c",
         priceLow: "#008C0C",
         priceLowTransparent: 'rgba(0, 140, 12, 0.15)',
-        nightTime: "#EBE2FF"
+        nightTime: "#EBE2FF",
+        lightGray: '#ECECEC',
 
       },
       borderRadius: {
