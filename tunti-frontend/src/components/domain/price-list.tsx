@@ -21,7 +21,7 @@ function PriceList() {
   // Function to format the start date
   const formatStartDate = (dateString: string): string => {
     const date = new Date(dateString)
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) // Formats to day HH:mm
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) // Formats to HH:mm
   }
 
   const formatPrice = (price: number): string => {
@@ -38,12 +38,13 @@ function PriceList() {
           indicatorColor = "bg-red-500"
         }
 
-        const isCurrentHour = entry.startDate === currentHour
+        // Apply styles for the first element based on whether it's the current hour
+        const isCurrentHourFirstElement = index === 0 && entry.startDate === currentHour
 
         return (
           <div key={index}>
             <div
-              className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHour ? "bg-blue-600 text-white border border-blue-400 shadow-lg" : ""}`}
+              className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHourFirstElement ? "bg-blue-600 text-white border border-blue-400 shadow-lg" : ""}`}
             >
               <div className={`w-3 h-3 ${indicatorColor} mr-2`} />
               <span className="flex-grow text-left">{formatStartDate(entry.startDate)}</span>
