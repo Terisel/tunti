@@ -39,16 +39,9 @@ function PriceList() {
         }
 
         const isCurrentHour = entry.startDate === currentHour
-        const currentDate = new Date(entry.startDate).toLocaleDateString()
-        const previousDate = index > 0 ? new Date(priceData[index - 1].startDate).toLocaleDateString() : null
 
         return (
           <div key={index}>
-            {currentDate !== previousDate && (
-              <h2 className="text-l font-bold my-4">
-                {new Date(entry.startDate).toLocaleDateString("en-US", { weekday: "long" })}
-              </h2>
-            )}
             <div
               className={`flex items-center p-[8px_16px] h-[36px] justify-between ${isCurrentHour ? "bg-blue-600 text-white border border-blue-400 shadow-lg" : ""}`}
             >
