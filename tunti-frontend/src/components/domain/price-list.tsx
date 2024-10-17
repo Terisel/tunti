@@ -2,7 +2,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { usePriceContext } from "@/contexts/price-context.tsx"
-import { useEffect, useRef } from "react"
 
 const getCurrentHour = (): string => {
   const now = new Date()
@@ -13,9 +12,6 @@ function PriceList() {
   const context = usePriceContext()
   const { priceData } = context
   const currentHour = getCurrentHour()
-
-  // Create a ref to store the current hour element
-  const currentHourRef = useRef<HTMLDivElement | null>(null)
 
   // Check if there are future prices
   if (priceData.length === 0) {
@@ -31,13 +27,6 @@ function PriceList() {
   const formatPrice = (price: number): string => {
     return (Math.round(price * 100) / 100).toFixed(2) // Round and format to two decimals
   }
-
-  useEffect(() => {
-    // Scroll to the current hour element if it exists
-    if (currentHourRef.current) {
-      currentHourRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
-    }
-  }, [priceData]) // Run effect whenever priceData change
 
   return (
     <ScrollArea className="rounded-md border">
@@ -62,7 +51,6 @@ function PriceList() {
                 </h2>
               )}
               <div
-                ref={isCurrentHour ? currentHourRef : null}
                 className={`flex items-center justify-between my-2 p-3 rounded-lg transition-all duration-300 ${isCurrentHour ? "bg-blue-600 text-white border border-blue-400 shadow-lg" : ""}`}
               >
                 <div className={`w-3 h-3 ${indicatorColor} mr-2`} />
