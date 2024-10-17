@@ -3,12 +3,18 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { usePriceContext } from "@/contexts/price-context.tsx"
 import { Moon } from "lucide-react"
 import { PriceEntry } from "@/types/types"
-import { formatStartDate, formatPrice } from "@/utils/priceUtils" // Import the utility functions
+import { formatStartDate, formatPrice, getDayNameInFinnish } from "@/utils/priceUtils" // Import the utility functions
 
 // New interface for PriceListScrollArea props
 export interface PriceListScrollAreaProps {
   priceData: PriceEntry[] // Array of price entries
   currentHour: string // Current hour in ISO format
+}
+
+// Function to check if the given date is the first hour of the day (00:00)
+const isFirstHourOfDay = (dateString: string): boolean => {
+  const date = new Date(dateString)
+  return date.getHours() === 0 && date.getMinutes() === 0 // Check for 00:00
 }
 
 const getCurrentHour = (): string => {
@@ -46,9 +52,18 @@ const PriceListScrollArea: React.FC<PriceListScrollAreaProps> = ({ priceData, cu
           : showMoonIcon
             ? "bg-nightTime" // Use purple background if not first and moon icon should be shown
             : "" // No specific background if neither condition is met
-
+        const isMidnight = isFirstHourOfDay(entry.startDate)
         return (
           <div key={index}>
+            {isMidnight ? (
+              <div
+                className={`flex border-b border-b-lightGray items-center p-[8px_16px] h-[36px] justify-between ${finalBackgroundColor}`}
+              >
+                <span>{getDayNameInFinnish(entry.startDate)}</span>
+              </div>
+            ) : (
+              <></>
+            )}
             <div
               className={`flex border-b border-b-lightGray items-center p-[8px_16px] h-[36px] justify-between ${finalBackgroundColor}`}
             >
@@ -56,7 +71,7 @@ const PriceListScrollArea: React.FC<PriceListScrollAreaProps> = ({ priceData, cu
                 {formatStartDate(entry.startDate)}
                 {showMoonIcon && <Moon className="inline-block ml-1 w-4 h-4" />}
               </span>
-              <span className={`text-right ${textColor}`}>{formatPrice(entry.price)} c/kWh</span>
+              <span className={`font-right ${textColor}`}>{formatPrice(entry.price)} c/kWh</span>
             </div>
           </div>
         )
