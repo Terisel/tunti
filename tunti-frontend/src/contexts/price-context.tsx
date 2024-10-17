@@ -3,6 +3,7 @@ import { createContext, useEffect, useContext, useMemo } from "react"
 import React, { useState, ReactNode } from "react"
 import { fetchPriceData } from "@/api.ts"
 import { PriceEntry } from "@/types/types.ts"
+import { filterPastPrices } from "@/lib/utils"; // Import the utility function
 
 // Define the shape of your context
 interface PriceContextType {
@@ -19,14 +20,17 @@ const PriceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>("")
 
+  const currentHour = new Date().toISOString().substring(0, 13) + ":00:00.000Z"; // Get current hour in required format
+
   // Fetch price data on component mount
   useEffect(() => {
     const getPriceData = async () => {
       try {
         const data = await fetchPriceData()
-        // Sort price data here before setting it
+        // Sort and filter price data here before setting it
         const sortedData = data.prices.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
-        setPriceData(sortedData) // Set sorted price entries directly
+        const filteredData = filterPastPrices(sortedData, currentHour); // Filter past prices
+        setPriceData(filteredData) // Set filtered price entries directly
       } catch (err) {
         setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
