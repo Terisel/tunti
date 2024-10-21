@@ -327,6 +327,19 @@ const prices: Price[] = [
   },
 ];
 
+const calculateAveragePrice = (
+  prices: Price[]
+): { average?: number; message?: string } => {
+  if (prices.length === 0) {
+    return { message: "No prices available." };
+  }
+
+  const total = prices.reduce((acc, curr) => acc + curr.price, 0);
+  const average = total / prices.length;
+
+  return { average };
+};
+
 // New endpoint to get keskiarvohinnan (average price)
 /**
  * @swagger
@@ -350,14 +363,13 @@ const prices: Price[] = [
 app.get(
   "/api/keskiarvohinnan",
   async (req: Request, res: Response): Promise<void> => {
-    if (prices.length === 0) {
-      res.status(404).json({ message: "No prices available." });
+    const result = calculateAveragePrice(prices);
+
+    if (result.message) {
+      res.status(404).json({ message: result.message });
     }
 
-    const total = prices.reduce((acc, curr) => acc + curr.price, 0);
-    const average = total / prices.length;
-
-    res.status(200).json({ keskiarvohinnan: average });
+    res.status(200).json({ keskiarvohinnan: result.average });
   }
 );
 
