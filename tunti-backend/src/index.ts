@@ -133,15 +133,29 @@ const calculateAveragePrice = (
   return { average };
 };
 
-// New endpoint to get today's average price
+// Function to generate a description based on average price
+const getPriceDescription = (average?: number): string => {
+  if (average === undefined) return "Ei tietoa hinnasta.";
+
+  // Define your threshold for high and low prices
+  const highPriceThreshold = 15; // Adjust this threshold based on your criteria
+
+  if (average > highPriceThreshold) {
+    return "Tänään sähkön hinta on korkea."; // High electricity price today
+  } else {
+    return "Tänään sähkön hinta on alhainen."; // Low electricity price today
+  }
+};
+
+// New endpoint to get today's average price and description
 /**
  * @swagger
  * /api/todays-average-price:
  *   get:
- *     summary: Retrieve today's average price
+ *     summary: Retrieve today's average price and description
  *     responses:
  *       200:
- *         description: The average price calculated from today's data.
+ *         description: The average price calculated from today's data and a description of the day's pricing.
  *         content:
  *           application/json:
  *             schema:
@@ -149,6 +163,8 @@ const calculateAveragePrice = (
  *               properties:
  *                 todaysAveragePrice:
  *                   type: number
+ *                 description:
+ *                   type: string
  *       404:
  *         description: No prices available for today.
  */
@@ -166,7 +182,9 @@ app.get(
         return;
       }
 
-      res.status(200).json({ todaysAveragePrice: result.average }); // Return today's average price
+      const description = getPriceDescription(result.average); // Get description based on average price
+
+      res.status(200).json({ todaysAveragePrice: result.average, description }); // Return today's average price and description
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).send({ message: error.message });
