@@ -8,16 +8,16 @@ describe("getPriceDescription", () => {
 
   it("should indicate high price when average is above threshold", () => {
     const prices: Price[] = [
-      { price: 20, startDate: "2024-10-22", endDate: "2024-10-22" },
-      { price: 25, startDate: "2024-10-22", endDate: "2024-10-22" },
+      { price: 20, startDate: "2024-10-18", endDate: "2024-10-18" },
+      { price: 25, startDate: "2024-10-18", endDate: "2024-10-18" },
     ];
     expect(getPriceDescription(prices, 22)).toBe("highPrice");
   });
 
   it("should indicate low price when average is below threshold", () => {
     const prices: Price[] = [
-      { price: 5, startDate: "2024-10-22", endDate: "2024-10-22" },
-      { price: 10, startDate: "2024-10-22", endDate: "2024-10-22" },
+      { price: 5, startDate: "2024-04-22", endDate: "2024-04-22" },
+      { price: 10, startDate: "2024-04-22", endDate: "2024-04-22" },
     ];
     expect(getPriceDescription(prices, 7.5)).toBe("lowPrice");
   });
