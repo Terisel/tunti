@@ -7,6 +7,14 @@ export interface Price {
   endDate: string;
 }
 
+// Constants for price descriptions
+export const PriceDescription = {
+  HIGH_PRICE: "highPrice",
+  LOW_PRICE: "lowPrice",
+  FLUCTUATING: "fluctuating",
+  NO_INFO: "noInfo",
+};
+
 // Function to calculate average price
 export const calculateAveragePrice = (
   prices: Price[]
@@ -26,7 +34,7 @@ export const getPriceDescription = (
   prices: Price[],
   average?: number
 ): string => {
-  if (average === undefined) return "Ei tietoa hinnasta."; // No information about the price.
+  if (average === undefined) return PriceDescription.NO_INFO; // No information about the price.
 
   // Define your thresholds for high and low prices
   const highPriceThreshold = 15; // Adjust this threshold based on your criteria
@@ -39,13 +47,13 @@ export const getPriceDescription = (
 
   // Check if there is significant fluctuation in today's prices
   if (maxPrice - minPrice > fluctuationThreshold) {
-    return "Tänään hinnat vaihtelevat paljon."; // Prices are fluctuating a lot today.
+    return PriceDescription.FLUCTUATING; // Prices are fluctuating a lot today.
   }
 
   // Determine if it's a high or low price day
   if (average > highPriceThreshold) {
-    return "Tänään sähkön hinta on korkea."; // High electricity price today.
+    return PriceDescription.HIGH_PRICE; // High electricity price today.
   } else {
-    return "Tänään sähkön hinta on alhainen."; // Low electricity price today.
+    return PriceDescription.LOW_PRICE; // Low electricity price today.
   }
 };
