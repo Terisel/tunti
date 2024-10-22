@@ -1,11 +1,31 @@
 // tunti-frontend/src/App.tsx
 import { PriceList } from "@/components/domain/price-list"
 import { usePriceContext } from "@/contexts/price-context.tsx"
+import { formatPrice } from "@/utils/priceUtils" // Import the utility functions
+
+const PriceDescription = {
+  highPrice: "Sähkönhinnat ovat tänään korkeat",
+  lowPrice: "Sähkönhinnat ovat tänään alhaiset",
+  fluctuating: "Sähkönhinta vaihtelee tänään",
+  noInfo: "Ei tietoa sähkönhinnoista"
+} as const
 
 // Main App Component
 function App() {
   const context = usePriceContext()
-  const { loading, error } = context
+  const { loading, error, description, todaysAveragePrice } = context
+
+  // Helper function to get colors based on price
+  const getColorsByPrice = (price: number) => {
+    if (price > 8 && price < 15) {
+      return "text-yellow-800"
+    } else if (price > 15) {
+      return "text-priceHigh"
+    }
+    return "text-priceLow"
+  }
+
+  const descriptionText = PriceDescription[description as keyof typeof PriceDescription] || "Unknown description"
 
   // Render loading state or error message
   if (loading) return <h1 className="text-2xl font-bold text-center">Loading...</h1>
@@ -14,15 +34,15 @@ function App() {
   return (
     <>
       <h1 className="text-2xl font-bold text-center">Tunti - Pörssisähkön seuranta</h1>
-      <div className="flex gap-4 mb-4 ">
-        <div className="w-1/2 h-104 pt-4 pr-2 pb-4 pl-4 items-center justify-center rounded-[16px] border h-[36px]">
+      <div className="container">
+        <div className="box">
           <div>keskihinta tänään</div>
           <span> klo 0-24</span>
-          <div> 7,68 c/kWh</div>
+          <div className={getColorsByPrice(todaysAveragePrice)}> {formatPrice(todaysAveragePrice)} c/kWh</div>
         </div>
 
-        <div className="w-1/2 h-104 pt-4 pr-2 pb-4 pl-4 items-center justify-center rounded-[16px] border h-[36px]">
-          <div>Sähkönhinta jee on alhaista tänään wuhuu</div>
+        <div className="box">
+          <div>{descriptionText}</div>
         </div>
       </div>
       <PriceList />

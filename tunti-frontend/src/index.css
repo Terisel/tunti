@@ -16,3 +16,26 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.container {
+  display: flex;
+  gap: 1rem; /* Equivalent to gap-4 */
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+}
+
+.box {
+  width: 50%; /* Equivalent to w-1/2 */
+  height: 104px; /* Equivalent to h-104 */
+  padding-top: 16px; /* Equivalent to pt-4 */
+  padding-right: 8px; /* Equivalent to pr-2 */
+  padding-bottom: 16px; /* Equivalent to pb-4 */
+  padding-left: 16px; /* Equivalent to pl-4 */
+  align-items: center; /* Equivalent to items-center */
+  justify-content: center; /* Equivalent to justify-center */
+  border-radius: 16px; /* Equivalent to rounded-[16px] */
+  border: 1px solid #ccc; /* Add a border color of your choice */
+}
+
+/* Optional: If you want a specific height for the box */
+.box {
+  height: auto; /* Remove fixed height if you want it to hug content */
+}
