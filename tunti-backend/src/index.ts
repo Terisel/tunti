@@ -340,12 +340,12 @@ const calculateAveragePrice = (
   return { average };
 };
 
-// New endpoint to get keskiarvohinnan (average price)
+// New endpoint to get keskiarvohinta (average price)
 /**
  * @swagger
- * /api/keskiarvohinnan:
+ * /api/keskiarvohinta:
  *   get:
- *     summary: Retrieve the average price (keskiarvohinnan)
+ *     summary: Retrieve the average price (keskiarvohinta)
  *     responses:
  *       200:
  *         description: The average price calculated from hardcoded data.
@@ -354,22 +354,23 @@ const calculateAveragePrice = (
  *             schema:
  *               type: object
  *               properties:
- *                 keskiarvohinnan:
+ *                 keskiarvohinta:
  *                   type: number
  *       404:
  *         description: No prices available.
  */
 
 app.get(
-  "/api/keskiarvohinnan",
+  "/api/keskiarvohinta",
   async (req: Request, res: Response): Promise<void> => {
     const result = calculateAveragePrice(prices);
 
     if (result.message) {
       res.status(404).json({ message: result.message });
+      return;
     }
 
-    res.status(200).json({ keskiarvohinnan: result.average });
+    res.status(200).json({ keskiarvohinta: result.average });
   }
 );
 
