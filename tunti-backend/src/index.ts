@@ -104,26 +104,11 @@ interface Price {
   endDate: string;
 }
 
-// New function to filter today's prices
-const getTodaysPrices = (prices: Price[]): Price[] => {
-  const now = new Date();
-
-  // Get start and end of today
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const endOfDay = new Date(startOfDay);
-  endOfDay.setDate(endOfDay.getDate() + 1); // End of day is midnight of the next day
-
-  return prices.filter((price) => {
-    const startDate = new Date(price.startDate);
-    return startDate >= startOfDay && startDate < endOfDay;
-  });
-};
-
 // Function to calculate average price
 const calculateAveragePrice = (
   prices: Price[]
 ): { average?: number; message?: string } => {
-  if (!prices || prices.length === 0) {
+  if (prices.length === 0) {
     return { message: "No prices available." };
   }
 
@@ -133,48 +118,60 @@ const calculateAveragePrice = (
   return { average };
 };
 
-// Function to generate a description based on average price
-const getPriceDescription = (average?: number): string => {
-  if (average === undefined) return "Ei tietoa hinnasta.";
+// Function to generate a description based on average price and variability
+const getPriceDescription = (prices: Price[], average?: number): string => {
+  if (average === undefined) return "Ei tietoa hinnasta."; // No information about the price.
 
-  // Define your threshold for high and low prices
+  // Define your thresholds for high and low prices
   const highPriceThreshold = 15; // Adjust this threshold based on your criteria
+  const fluctuationThreshold = 20; // Threshold for significant price fluctuation
 
+  // Calculate max and min prices to check for fluctuation
+  const pricesArray = prices.map((price) => price.price);
+  const maxPrice = Math.max(...pricesArray);
+  const minPrice = Math.min(...pricesArray);
+
+  // Check if there is significant fluctuation in today's prices
+  if (maxPrice - minPrice > fluctuationThreshold) {
+    return "Tänään hinnat vaihtelevat paljon."; // Prices are fluctuating a lot today.
+  }
+
+  // Determine if it's a high or low price day
   if (average > highPriceThreshold) {
-    return "Tänään sähkön hinta on korkea."; // High electricity price today
+    return "Tänään sähkön hinta on korkea."; // High electricity price today.
   } else {
-    return "Tänään sähkön hinta on alhainen."; // Low electricity price today
+    return "Tänään sähkön hinta on alhainen."; // Low electricity price today.
   }
 };
 
 // New endpoint to get today's average price and description
 /**
  * @swagger
- * /api/todays-average-price:
+ * /api/keskiarvohinta:
  *   get:
- *     summary: Retrieve today's average price and description
+ *     summary: Retrieve the average price and variability description
  *     responses:
  *       200:
- *         description: The average price calculated from today's data and a description of the day's pricing.
+ *         description: The average price calculated from fetched data and a description of price variability.
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 todaysAveragePrice:
+ *                 keskiarvohinta:
  *                   type: number
  *                 description:
  *                   type: string
  *       404:
- *         description: No prices available for today.
+ *         description: No prices available.
  */
 app.get(
-  "/api/todays-average-price",
+  "/api/keskiarvohinta",
   async (req: Request, res: Response): Promise<void> => {
     try {
       const jsonData = await fetchLatestPrices(); // Fetch latest prices
 
-      const todaysPrices = getTodaysPrices(jsonData.prices); // Filter today's prices
+      const todaysPrices = jsonData.prices; // Assuming you have today's prices in jsonData
       const result = calculateAveragePrice(todaysPrices); // Calculate average based on today's prices
 
       if (result.message) {
@@ -182,9 +179,9 @@ app.get(
         return;
       }
 
-      const description = getPriceDescription(result.average); // Get description based on average price
+      const description = getPriceDescription(todaysPrices, result.average); // Get description based on average price and variability
 
-      res.status(200).json({ todaysAveragePrice: result.average, description }); // Return today's average price and description
+      res.status(200).json({ keskiarvohinta: result.average, description }); // Return today's average price and description
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).send({ message: error.message });
