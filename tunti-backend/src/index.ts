@@ -3,7 +3,11 @@ import cors from "cors";
 import https from "https";
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import { calculateAveragePrice, getPriceDescription } from "./priceUtils";
+import {
+  calculateAveragePrice,
+  getPriceDescription,
+  getCurrentDayPrices,
+} from "./priceUtils";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -101,7 +105,7 @@ app.get(
 // New endpoint to get today's average price and description
 /**
  * @swagger
- * /api/keskiarvohinta:
+ * /api/todaysAveragePrice:
  *   get:
  *     summary: Retrieve the average price and variability description
  *     responses:
@@ -112,7 +116,7 @@ app.get(
  *             schema:
  *               type: object
  *               properties:
- *                 keskiarvohinta:
+ *                 todaysAveragePrice:
  *                   type: number
  *                 description:
  *                   type: string
@@ -120,12 +124,12 @@ app.get(
  *         description: No prices available.
  */
 app.get(
-  "/api/keskiarvohinta",
+  "/api/todaysAveragePrice",
   async (req: Request, res: Response): Promise<void> => {
     try {
       const jsonData = await fetchLatestPrices(); // Fetch latest prices
 
-      const todaysPrices = jsonData.prices; // Assuming you have today's prices in jsonData
+      const todaysPrices = getCurrentDayPrices(jsonData.prices); // Assuming you have today's prices in jsonData
       const result = calculateAveragePrice(todaysPrices); // Calculate average based on today's prices
 
       if (result.message) {
@@ -135,7 +139,50 @@ app.get(
 
       const description = getPriceDescription(todaysPrices, result.average); // Get description based on average price and variability
 
-      res.status(200).json({ keskiarvohinta: result.average, description }); // Return today's average price and description
+      res.status(200).json({ todaysAveragePrice: result.average, description }); // Return today's average price and description
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).send({ message: error.message });
+      } else {
+        res.status(500).send({ message: "Internal Server Error" });
+      }
+    }
+  }
+);
+
+// New combined endpoint for latest prices and today's average price
+/**
+ * @swagger
+ * /api/latest-prices-and-average:
+ *   get:
+ *     summary: Retrieve latest prices, today's average price, and description
+ *     responses:
+ *       200:
+ *         description: A JSON object containing the latest prices, today's average price, and a description of price variability.
+ *       500:
+ *         description: Internal Server Error
+ */
+app.get(
+  "/api/latest-prices-and-average",
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const jsonData = await fetchLatestPrices(); // Fetch latest prices
+
+      const todaysPrices = getCurrentDayPrices(jsonData.prices); // Assuming you have today's prices in jsonData
+      const result = calculateAveragePrice(todaysPrices); // Calculate average based on today's prices
+
+      if (result.message) {
+        res.status(404).json({ message: result.message });
+        return;
+      }
+
+      const description = getPriceDescription(todaysPrices, result.average); // Get description based on average price and variability
+
+      res.status(200).json({
+        prices: jsonData.prices,
+        todaysAveragePrice: result.average,
+        description: description,
+      }); // Return latest prices, today's average price, and description
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).send({ message: error.message });

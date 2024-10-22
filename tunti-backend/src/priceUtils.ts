@@ -29,6 +29,23 @@ export const calculateAveragePrice = (
   return { average };
 };
 
+// Function to filter prices for the current day
+export const getCurrentDayPrices = (prices: Price[]): Price[] => {
+  const now = new Date();
+
+  // Get the start and end of the current day
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfDay = new Date(startOfDay);
+  endOfDay.setDate(endOfDay.getDate() + 1); // End of the day is the next day at midnight
+
+  // Filter prices for today
+  return prices.filter((price) => {
+    const startDate = new Date(price.startDate);
+    const endDate = new Date(price.endDate);
+    return startDate >= startOfDay && endDate < endOfDay;
+  });
+};
+
 // Function to generate a description based on average price and variability
 export const getPriceDescription = (
   prices: Price[],
