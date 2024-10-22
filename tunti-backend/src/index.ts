@@ -104,48 +104,20 @@ interface Price {
   endDate: string;
 }
 
-// New endpoint to get keskiarvohinta (average price)
-/**
- * @swagger
- * /api/keskiarvohinta:
- *   get:
- *     summary: Retrieve the average price (keskiarvohinta)
- *     responses:
- *       200:
- *         description: The average price calculated from fetched data.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 keskiarvohinta:
- *                   type: number
- *       404:
- *         description: No prices available.
- */
-app.get(
-  "/api/keskiarvohinta",
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      const jsonData = await fetchLatestPrices(); // Fetch latest prices
+// New function to filter today's prices
+const getTodaysPrices = (prices: Price[]): Price[] => {
+  const now = new Date();
 
-      const result = calculateAveragePrice(jsonData.prices); // Calculate average based on fetched data
+  // Get start and end of today
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfDay = new Date(startOfDay);
+  endOfDay.setDate(endOfDay.getDate() + 1); // End of day is midnight of the next day
 
-      if (result.message) {
-        res.status(404).json({ message: result.message });
-        return;
-      }
-
-      res.status(200).json({ keskiarvohinta: result.average });
-    } catch (error) {
-      if (error instanceof Error) {
-        res.status(500).send({ message: error.message });
-      } else {
-        res.status(500).send({ message: "Internal Server Error" });
-      }
-    }
-  }
-);
+  return prices.filter((price) => {
+    const startDate = new Date(price.startDate);
+    return startDate >= startOfDay && startDate < endOfDay;
+  });
+};
 
 // Function to calculate average price
 const calculateAveragePrice = (
@@ -160,6 +132,50 @@ const calculateAveragePrice = (
 
   return { average };
 };
+
+// New endpoint to get today's average price
+/**
+ * @swagger
+ * /api/todays-average-price:
+ *   get:
+ *     summary: Retrieve today's average price
+ *     responses:
+ *       200:
+ *         description: The average price calculated from today's data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 todaysAveragePrice:
+ *                   type: number
+ *       404:
+ *         description: No prices available for today.
+ */
+app.get(
+  "/api/todays-average-price",
+  async (req: Request, res: Response): Promise<void> => {
+    try {
+      const jsonData = await fetchLatestPrices(); // Fetch latest prices
+
+      const todaysPrices = getTodaysPrices(jsonData.prices); // Filter today's prices
+      const result = calculateAveragePrice(todaysPrices); // Calculate average based on today's prices
+
+      if (result.message) {
+        res.status(404).json({ message: result.message });
+        return;
+      }
+
+      res.status(200).json({ todaysAveragePrice: result.average }); // Return today's average price
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).send({ message: error.message });
+      } else {
+        res.status(500).send({ message: "Internal Server Error" });
+      }
+    }
+  }
+);
 
 app.get("/", (req, res) => {
   res.send("Hello");
