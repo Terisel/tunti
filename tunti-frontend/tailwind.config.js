@@ -4,6 +4,13 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      height: {
+        '104': '104px',
+      },
+      spacing: {
+        '42': '42px',
+      },
+
       colors: {
         primary: "#4e8098",
         secondary: "#ced3dc",
