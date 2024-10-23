@@ -5,14 +5,89 @@
 
 :root {
   max-width: 640px;
+  margin: 0 auto;
   padding: 2rem;
-
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.box {
+  flex: 1;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 24px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+}
+
+.price-title {
+  color: #6B7280;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.description-text {
+  color: #6B7280;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.price-subtitle {
+  color: #9CA3AF;
+  font-size: 1.000rem;
+  margin-bottom: 1rem;
+}
+
+.price-value {
+  font-size: 1.533rem;
+  font-weight: 600;
+  margin-top: auto;
+}
+
+.price-value.text-priceLow {
+  color: rgb(0, 140, 12);
+}
+
+.price-value.text-priceHigh {
+  color: rgb(251, 24, 28);
+}
+
+.price-value.text-yellow-800 {
+  color: rgb(133, 77, 14);
+}
+
+.description-box {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.bg-priceHighTransparent {
+  background-color: rgba(251, 24, 28, 0.15);
+}
+
+.bg-priceLowTransparent {
+  background-color: rgba(0, 140, 12, 0.15);
+}
+
+.bg-purple-100 {
+  background-color: rgba(168, 85, 247, 0.15);
 }

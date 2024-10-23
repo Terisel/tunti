@@ -6,4 +6,6 @@ export interface PriceEntry {
 }
 export interface PriceData {
   prices: PriceEntry[]
+  todaysAveragePrice: number
+  description: string
 }
