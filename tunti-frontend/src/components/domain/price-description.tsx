@@ -1,4 +1,7 @@
 // src/components/domain/price-description.tsx
+import { TrendingUp, ArrowLeftRight, HelpCircle, LucideIcon, PiggyBank } from "lucide-react"
+import React from "react"
+
 const PRICE_DESCRIPTION_MESSAGES = {
   highPrice: "Sähkönhinnat ovat tänään korkeat",
   lowPrice: "Sähkönhinnat ovat tänään alhaiset",
@@ -6,36 +9,28 @@ const PRICE_DESCRIPTION_MESSAGES = {
   noInfo: "Ei tietoa sähkönhinnoista"
 } as const
 
-// Helper function to get background color based on description type
-const getDescriptionBackground = (description: keyof typeof PRICE_DESCRIPTION_MESSAGES) => {
-  switch (description) {
-    case 'highPrice':
-      return 'bg-priceHighTransparent'
-    case 'lowPrice':
-      return 'bg-priceLowTransparent'
-    case 'fluctuating':
-      return 'bg-purple-100'
-    case 'noInfo':
-      return 'bg-[rgba(251,24,28,0.15)]'
-    default:
-      return ''
-  }
+const DESCRIPTION_ICONS: Record<keyof typeof PRICE_DESCRIPTION_MESSAGES, LucideIcon> = {
+  highPrice: TrendingUp,
+  lowPrice: PiggyBank,
+  fluctuating: ArrowLeftRight,
+  noInfo: HelpCircle
 }
 
 interface PriceDescriptionProps {
   description: string
 }
 
-function PriceDescription({ description }: PriceDescriptionProps) {
+export const PriceDescription: React.FC<PriceDescriptionProps> = ({ description }) => {
   const descriptionType = description as keyof typeof PRICE_DESCRIPTION_MESSAGES
   const descriptionText = PRICE_DESCRIPTION_MESSAGES[descriptionType] || "Unknown description"
-  const descriptionBgColor = getDescriptionBackground(descriptionType)
+  const IconComponent = DESCRIPTION_ICONS[descriptionType] || HelpCircle
 
   return (
-    <div className={`box description-box ${descriptionBgColor}`}>
-      <div className="description-text">{descriptionText}</div>
+    <div className={`box description-box p-6 rounded-xl`}>
+      <div className="description-text">
+        <span>{descriptionText} </span>
+        <IconComponent className="h-8 w-8" />
+      </div>
     </div>
   )
 }
-
-export { PriceDescription }
