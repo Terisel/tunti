@@ -1,15 +1,23 @@
 name: Frontend Tests
 
 on:
+  # Trigger on push to your specific branch
   push:
     branches:
       - github-actions-setup
-    paths:
-      - 'tunti-frontend/**'  # Only trigger on frontend changes
-  pull_request:
-    paths:
-      - 'tunti-frontend/**'
-  workflow_dispatch:  # Allow manual triggers
+  # Also allow manual trigger
+  workflow_dispatch:
+
+# on:
+#   push:
+#     branches:
+#       - github-actions-setup
+#     paths:
+#       - 'tunti-frontend/**'  # Only trigger on frontend changes
+#   pull_request:
+#     paths:
+#       - 'tunti-frontend/**'
+#   workflow_dispatch:  # Allow manual triggers
 
 jobs:
   test:
