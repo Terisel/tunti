@@ -20,17 +20,6 @@ jobs:
       with:
         ref: ${{ github.event.inputs.branch || github.ref }}
 
-    - name: Print information
-      run: |
-        echo "Hello from GitHub Actions!"
-        echo "Running on branch: ${{ github.ref }}"
-        echo "Repository: ${{ github.repository }}"
-        echo "Workflow name: ${{ github.workflow }}"
-        echo "Current working directory:"
-        pwd
-        echo "Contents of current directory:"
-        ls -la
-
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
