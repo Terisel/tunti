@@ -6,11 +6,6 @@ on:
       - main
     paths:
       - 'tunti-frontend/**'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'tunti-frontend/**'
   workflow_dispatch:
 
 # Set permissions for the entire workflow
