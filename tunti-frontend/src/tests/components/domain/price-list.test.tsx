@@ -14,7 +14,8 @@ jest.mock("@/contexts/price-context.tsx", () => ({
 const mockPriceData = [
   { price: 12.452, startDate: "2024-10-09T09:00:00.000Z", endDate: "2024-10-09T10:00:00.000Z" },
   { price: 15.456, startDate: "2024-10-09T10:00:00.000Z", endDate: "2024-10-09T11:00:00.000Z" },
-  { price: 14.123, startDate: "2024-10-09T21:00:00.000Z", endDate: "2024-10-09T22:00:00.000Z" }
+  { price: 14.123, startDate: "2024-10-09T21:00:00.000Z", endDate: "2024-10-09T22:00:00.000Z" },
+  { price: 13.789, startDate: "2024-10-10T00:00:00.000Z", endDate: "2024-10-10T01:00:00.000Z" }
 ]
 
 describe("PriceList Component", () => {
