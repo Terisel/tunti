@@ -14,6 +14,7 @@
     "test": "jest",
     "watch": "jest --watch"
   },
+  "homepage": "https://terisel.github.io/tunti",
   "dependencies": {
     "@radix-ui/react-scroll-area": "^1.2.0",
     "@radix-ui/react-separator": "^1.1.0",
