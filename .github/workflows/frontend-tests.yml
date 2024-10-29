@@ -44,4 +44,4 @@ jobs:
       run: npm test
 
     - name: Check branch and ref
-      run: echo "Running on branch: ${{ github.ref }}"
+      run: "echo 'Running on branch: ${{ github.event.inputs.branch || github.head_ref || github.ref }}'"
