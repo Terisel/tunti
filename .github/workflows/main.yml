@@ -1,0 +1,43 @@
+name: Manual Workflow
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        type: choice
+        required: true
+        default: 'staging'
+        options:
+        - staging
+        - production
+      message:
+        description: 'Test message'
+        required: true
+        default: 'Hello from manual trigger'
+
+jobs:
+  test-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: github-actions-setup  # This will checkout your specific branch
+
+      - name: Show triggered event info
+        run: |
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Branch: ${{ github.ref }}"
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Message: ${{ inputs.message }}"
+
+      - name: Run a simple test
+        run: |
+          echo "Running tests..."
+          # Add your test commands here
+          echo "Tests completed!"
+
+      - name: Show success message
+        run: echo "Workflow completed successfully!"
