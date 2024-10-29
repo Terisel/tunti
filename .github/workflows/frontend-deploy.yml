@@ -1,0 +1,76 @@
+name: Frontend Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'tunti-frontend/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'tunti-frontend/**'
+  workflow_dispatch:
+
+# Set permissions for the entire workflow
+permissions:
+  contents: write # Required for pushing to gh-pages branch
+  pages: write    # Required for deploying to GitHub Pages
+  id-token: write # Required for authentication
+  checks: write   # Required for creating checks
+  pull-requests: write # Required for PR interactions
+  deployments: write   # Required for deployments
+  statuses: write      # Required for commit statuses
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    # Optionally set permissions at the job level if you need to restrict certain jobs
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      
+    defaults:
+      run:
+        working-directory: tunti-frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true # Ensure credentials are persisted
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: tunti-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run tsc --if-present
+
+      - name: Run ESLint
+        run: npm run lint --if-present
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          npx gh-pages -d dist --dotfiles true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
