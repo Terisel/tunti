@@ -10,7 +10,7 @@
     "tsc": "tsc --noEmit",
     "dev": "nodemon src/index.ts",
     "lint": "eslint \"{src,test}/**/*.ts\" --fix",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
   },
   "keywords": [],
   "author": "",
