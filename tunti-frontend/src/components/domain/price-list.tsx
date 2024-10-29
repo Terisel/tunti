@@ -3,12 +3,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { usePriceContext } from "@/contexts/price-context.tsx"
 import { Moon } from "lucide-react"
 import { PriceEntry } from "@/types/types"
-import { formatStartDate, formatPrice, getDayNameInFinnish } from "@/utils/priceUtils" // Import the utility functions
+import { formatStartDate, formatPrice, getDayNameInFinnish } from "@/utils/priceUtils"
 
-// New interface for PriceListScrollArea props
 export interface PriceListScrollAreaProps {
-  priceData: PriceEntry[] // Array of price entries
-  currentHour: string // Current hour in ISO format
+  priceData: PriceEntry[] 
+  currentHour: string 
 }
 
 // Function to check if the given date is the first hour of the day (00:00)
