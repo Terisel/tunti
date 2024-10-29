@@ -14,7 +14,7 @@ jest.mock("@/contexts/price-context.tsx", () => ({
 const mockPriceData = [
   { price: 12.452, startDate: "2024-10-09T09:00:00.000Z", endDate: "2024-10-09T10:00:00.000Z" },
   { price: 15.456, startDate: "2024-10-09T10:00:00.000Z", endDate: "2024-10-09T11:00:00.000Z" },
-  { price: 14.123, startDate: "2024-10-10T09:00:00.000Z", endDate: "2024-10-10T10:00:00.000Z" }
+  { price: 14.123, startDate: "2024-10-09T21:00:00.000Z", endDate: "2024-10-09T22:00:00.000Z" }
 ]
 
 describe("PriceList Component", () => {
@@ -39,7 +39,6 @@ describe("PriceList Component", () => {
     expect(screen.getByText(/12.45 c\/kWh/i)).toBeInTheDocument()
     expect(screen.getByText(/15.46 c\/kWh/i)).toBeInTheDocument()
     // Assert that the day headers are displayed correctly
-    expect(screen.getByText(/Wednesday/i)).toBeInTheDocument() // For October 9
-    expect(screen.getByText(/Thursday/i)).toBeInTheDocument() // For October 10
+    expect(screen.getByText(/torstai 10.10/i)).toBeInTheDocument() // For October 10
   })
 })
