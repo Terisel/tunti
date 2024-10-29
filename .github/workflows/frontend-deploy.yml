@@ -1,4 +1,4 @@
-name: Frontend Deployment
+name: Deploy Frontend to GitHub Pages
 
 on:
   push:
@@ -8,36 +8,28 @@ on:
       - 'tunti-frontend/**'
   workflow_dispatch:
 
-# Set permissions for the entire workflow
 permissions:
-  contents: write # Required for pushing to gh-pages branch
-  pages: write    # Required for deploying to GitHub Pages
-  id-token: write # Required for authentication
-  checks: write   # Required for creating checks
-  pull-requests: write # Required for PR interactions
-  deployments: write   # Required for deployments
-  statuses: write      # Required for commit statuses
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    # Optionally set permissions at the job level if you need to restrict certain jobs
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-      
     defaults:
       run:
         working-directory: tunti-frontend
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true # Ensure credentials are persisted
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -61,11 +53,21 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: tunti-frontend/dist # Vite builds to the dist directory
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy to GitHub Pages
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          npx gh-pages -d dist --dotfiles true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: deployment
+        uses: actions/deploy-pages@v4
