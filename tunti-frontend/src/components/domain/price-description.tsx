@@ -6,7 +6,7 @@ const PRICE_DESCRIPTION_MESSAGES = {
   highPrice: "Sähkönhinnat ovat tänään korkeat",
   lowPrice: "Sähkönhinnat ovat tänään alhaiset",
   fluctuating: "Sähkönhinta vaihtelee tänään",
-  noInfo: "Ei tietoa sähkönhinnoista"
+  noInfo: "Ei tietoa sähkönhinnoista."
 } as const
 
 const DESCRIPTION_ICONS: Record<keyof typeof PRICE_DESCRIPTION_MESSAGES, LucideIcon> = {
