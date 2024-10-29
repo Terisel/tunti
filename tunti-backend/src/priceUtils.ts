@@ -9,18 +9,16 @@ export interface Price {
 
 // Constants for price descriptions
 export const PriceDescription = {
-  HIGH_PRICE: "highPrice",
-  LOW_PRICE: "lowPrice",
-  FLUCTUATING: "fluctuating",
-  NO_INFO: "noInfo",
+  HIGH_PRICE: 'highPrice',
+  LOW_PRICE: 'lowPrice',
+  FLUCTUATING: 'fluctuating',
+  NO_INFO: 'noInfo',
 };
 
 // Function to calculate average price
-export const calculateAveragePrice = (
-  prices: Price[]
-): { average?: number; message?: string } => {
+export const calculateAveragePrice = (prices: Price[]): { average?: number; message?: string } => {
   if (prices.length === 0) {
-    return { message: "No prices available." };
+    return { message: 'No prices available.' };
   }
 
   const total = prices.reduce((acc, curr) => acc + curr.price, 0);
@@ -47,10 +45,7 @@ export const getCurrentDayPrices = (prices: Price[]): Price[] => {
 };
 
 // Function to generate a description based on average price and variability
-export const getPriceDescription = (
-  prices: Price[],
-  average?: number
-): string => {
+export const getPriceDescription = (prices: Price[], average?: number): string => {
   if (average === undefined) return PriceDescription.NO_INFO; // No information about the price.
 
   // Define your thresholds for high and low prices

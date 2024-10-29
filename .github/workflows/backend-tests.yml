@@ -40,11 +40,11 @@ jobs:
       - name: Install dependencies
         run: npm ci  # Uses package-lock.json for exact versions
 
-      # - name: Type check
-      #   run: npm run tsc --if-present  # Run TypeScript compilation check if script exists
+      - name: Type check
+        run: npm run tsc --if-present  # Run TypeScript compilation check if script exists
 
-      # - name: Run ESLint
-      #   run: npm run lint --if-present  # Run linting if script exists
+      - name: Run ESLint
+        run: npm run lint --if-present  # Run linting if script exists
 
       - name: Run tests
         run: npm test
