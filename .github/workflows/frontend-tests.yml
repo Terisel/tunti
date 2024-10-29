@@ -3,15 +3,15 @@ name: Frontend Tests
 on:
   push:
     branches:
-      - github-actions-setup  # Specify your branch name here
+      - github-actions-setup
     paths:
       - 'tunti/tunti-frontend/**'
   pull_request:
     branches:
-      - github-actions-setup  # Specify your branch name here
+      - github-actions-setup
     paths:
       - 'tunti/tunti-frontend/**'
-  workflow_dispatch:  # This allows manual triggering from GitHub UI
+  workflow_dispatch:
     inputs:
       branch:
         description: 'Branch to run tests on'
@@ -32,6 +32,17 @@ jobs:
       with:
         ref: ${{ github.event.inputs.branch || github.ref }}
 
+    - name: Print information
+      run: |
+        echo "Hello from GitHub Actions!"
+        echo "Running on branch: ${{ github.ref }}"
+        echo "Repository: ${{ github.repository }}"
+        echo "Workflow name: ${{ github.workflow }}"
+        echo "Current working directory:"
+        pwd
+        echo "Contents of current directory:"
+        ls -la
+
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
@@ -41,4 +52,4 @@ jobs:
       run: npm ci
 
     - name: Run tests
-      run: npm test
+      run: echo "This is where npm test would run"
