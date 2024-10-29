@@ -4,29 +4,55 @@ on:
   push:
     branches:
       - github-actions-setup
-  workflow_dispatch:
+    paths:
+      - 'tunti-frontend/**'  # Only trigger on frontend changes
+  pull_request:
+    paths:
+      - 'tunti-frontend/**'
+  workflow_dispatch:  # Allow manual triggers
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
     defaults:
       run:
-        working-directory: tunti/tunti-frontend
+        working-directory: ./tunti-frontend  # Set working directory to frontend folder
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.inputs.branch || github.ref }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Using latest LTS version
+          cache: 'npm'
+          cache-dependency-path: ./tunti-frontend/package-lock.json
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci  # Uses package-lock.json for exact versions
 
-    - name: Run tests
-      run: echo "This is where npm test would run"
+      # - name: Type check
+      #   run: npm run tsc --if-present  # Run TypeScript compilation check if script exists
+
+      # - name: Run ESLint
+      #   run: npm run lint --if-present  # Run linting if script exists
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true  # Ensures tests run in CI mode
+
+      # Optional: Add test coverage reporting
+      - name: Generate test coverage
+        run: npm test -- --coverage
+        if: success()  # Only run if tests passed
+
+      # Optional: Upload coverage reports
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: coverage-report
+          path: tunti-frontend/coverage/
+          retention-days: 30
