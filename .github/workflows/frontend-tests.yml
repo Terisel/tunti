@@ -4,19 +4,7 @@ on:
   push:
     branches:
       - github-actions-setup
-    paths:
-      - 'tunti/tunti-frontend/**'
-  pull_request:
-    branches:
-      - github-actions-setup
-    paths:
-      - 'tunti/tunti-frontend/**'
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to run tests on'
-        required: true
-        default: 'github-actions-setup'
 
 jobs:
   test:
