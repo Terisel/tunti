@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - launch-github-pages-after-merge-main
     paths:
       - 'tunti-frontend/**'
   pull_request:
