@@ -2,12 +2,21 @@ name: Frontend Tests
 
 on:
   push:
+    branches:
+      - github-actions-setup  # Specify your branch name here
     paths:
       - 'tunti/tunti-frontend/**'
   pull_request:
+    branches:
+      - github-actions-setup  # Specify your branch name here
     paths:
       - 'tunti/tunti-frontend/**'
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run tests on'
+        required: true
+        default: 'github-actions-setup'
 
 jobs:
   test:
@@ -19,6 +28,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.inputs.branch || github.ref }}
 
     - name: Use Node.js
       uses: actions/setup-node@v3
