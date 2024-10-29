@@ -11,7 +11,7 @@ on:
       - github-actions-setup  # Specify your branch name here
     paths:
       - 'tunti/tunti-frontend/**'
-  workflow_dispatch:
+  workflow_dispatch:  # This allows manual triggering from GitHub UI
     inputs:
       branch:
         description: 'Branch to run tests on'
@@ -27,7 +27,8 @@ jobs:
         working-directory: tunti/tunti-frontend
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
       with:
         ref: ${{ github.event.inputs.branch || github.ref }}
 
@@ -41,3 +42,6 @@ jobs:
 
     - name: Run tests
       run: npm test
+
+    - name: Check branch and ref
+      run: echo "Running on branch: ${{ github.ref }}"
