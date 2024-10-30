@@ -4,9 +4,8 @@ on:
   push:
     branches:
       - main
-      - parannettu-frontend-action
-    # paths:
-    #   - 'tunti-frontend/**'
+    paths:
+      - 'tunti-frontend/**'
   workflow_dispatch:
 
 permissions:
