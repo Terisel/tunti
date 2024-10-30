@@ -12,7 +12,7 @@ function App() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-center">Tunti - Pörssisähkön seuranta</h1>
+      <h1 className="text-2xl font-bold text-center">Tunti - Pörssisähkön seuranta!</h1>
       <div className="container">
         <AveragePrice price={todaysAveragePrice} />
         <PriceDescription description={description} />
