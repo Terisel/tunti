@@ -9,25 +9,15 @@ on:
     #   - 'tunti-frontend/**'
   workflow_dispatch:
 
-# Set permissions for the entire workflow
 permissions:
-  contents: write # Required for pushing to gh-pages branch
-  pages: write    # Required for deploying to GitHub Pages
-  id-token: write # Required for authentication
-  checks: write   # Required for creating checks
-  pull-requests: write # Required for PR interactions
-  deployments: write   # Required for deployments
-  statuses: write      # Required for commit statuses
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    # Optionally set permissions at the job level if you need to restrict certain jobs
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-      
+    
     defaults:
       run:
         working-directory: tunti-frontend
@@ -35,8 +25,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true # Ensure credentials are persisted
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -62,8 +50,14 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist  # Set this to your build output directory
+          path: 'tunti-frontend/dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
