@@ -8,25 +8,18 @@ on:
       - 'tunti-frontend/**'
   workflow_dispatch:
 
-# Set permissions for the entire workflow
 permissions:
-  contents: write # Required for pushing to gh-pages branch
-  pages: write    # Required for deploying to GitHub Pages
-  id-token: write # Required for authentication
-  checks: write   # Required for creating checks
-  pull-requests: write # Required for PR interactions
-  deployments: write   # Required for deployments
-  statuses: write      # Required for commit statuses
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    # Optionally set permissions at the job level if you need to restrict certain jobs
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
-      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
     defaults:
       run:
         working-directory: tunti-frontend
@@ -34,8 +27,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true # Ensure credentials are persisted
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -61,11 +52,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: 'tunti-frontend/dist'
+
       - name: Deploy to GitHub Pages
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          npx gh-pages -d dist --dotfiles true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: deployment
+        uses: actions/deploy-pages@v3
